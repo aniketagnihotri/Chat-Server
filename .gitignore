@@ -1,0 +1,4 @@
+# Disregard IDE directories and .class files
+.idea
+out
+Chat-System-Challenge.iml
