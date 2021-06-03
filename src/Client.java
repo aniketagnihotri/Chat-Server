@@ -4,9 +4,19 @@ import java.net.Socket;
 public class Client implements Runnable {
 
     private final Socket serverSocket;
+    private boolean alive;
 
-    public Client(Socket serverSocket) {
+    public Client(Socket serverSocket, boolean alive) {
         this.serverSocket = serverSocket;
+        this.alive = alive;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public void run() {
@@ -15,6 +25,10 @@ public class Client implements Runnable {
             while (true) {
                 if (br.ready()) {
                     System.out.println("Server says " + br.readLine());
+                }
+                if (!alive) {
+                    br.close();
+                    return;
                 }
             }
         } catch (IOException e) {
@@ -25,8 +39,8 @@ public class Client implements Runnable {
     public static void main(String[] Args) throws IOException {
         BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Server hostname: ");
-        String hostname = "localhost";
-        System.out.print ("\nServer port number: ");
+        String hostname = inputReader.readLine();
+        System.out.print ("Server port number: ");
         String portNum = inputReader.readLine();
         int port = Integer.parseInt(portNum);
         Socket serverSocket;
@@ -36,7 +50,7 @@ public class Client implements Runnable {
             System.out.println("\nClient-side socket has been initialized and a connection has been established!");
 
             // Create Server Reader
-            Client client = new Client(serverSocket);
+            Client client = new Client(serverSocket, true);
             Thread listenerThread = new Thread(client);
             listenerThread.start();
 
@@ -47,7 +61,7 @@ public class Client implements Runnable {
                 try {
                     String request = inputReader.readLine();
                     if (request.equalsIgnoreCase("close")) {
-                        bw.write("close\n");
+                        bw.write("\r\n");
                         break;
                     }
                     bw.write("0" + request + "\n");
@@ -56,7 +70,11 @@ public class Client implements Runnable {
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
+            client.setAlive(false);
+            bw.close();
+            serverSocket.close();
+            listenerThread.join();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 

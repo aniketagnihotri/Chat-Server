@@ -7,18 +7,13 @@ public class ChatServer implements Runnable {
     private final int numClients;
     private final ServerSocket serverSocket;
     static Socket[] clientSockets;
-//    final PipedOutputStream writeMessages;
-//    final PipedInputStream readMessages;
 
     public ChatServer(int numClients) throws IOException {
         this.numClients = numClients;
         // Some firewalls may block certain ports.
         // Entering 0 for port number will find the first open port to broadcast on.
         this.serverSocket = new ServerSocket(0);
-        this.clientSockets = new Socket[numClients];
-        // Configure message streams for message dispatcher threads
-//        this.writeMessages = new PipedOutputStream();
-//        this.readMessages = new PipedInputStream(writeMessages);
+        clientSockets = new Socket[numClients];
     }
 
     // Client listener

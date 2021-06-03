@@ -1,19 +1,29 @@
 public class Message {
 
-    private int id;
+    private int fromID;
+    private int toID;
     private String text;
 
-    public Message(int id, String text) {
-        this.id = id;
+    public Message(int fromID, int toID, String text) {
+        this.fromID = fromID;
+        this.toID = toID;
         this.text = text;
     }
 
-    public int getId() {
-        return id;
+    public int getFromID() {
+        return fromID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFromID(int fromID) {
+        this.fromID = fromID;
+    }
+
+    public int getToID() {
+        return toID;
+    }
+
+    public void setToID(int toID) {
+        this.toID = toID;
     }
 
     public String getText() {

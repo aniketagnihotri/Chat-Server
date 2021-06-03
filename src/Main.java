@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+    // Server driver method
     public static void main(String[] args) {
         // Get the number of clients to allow at once.
         System.out.print("Enter the max number of clients to allow: ");
